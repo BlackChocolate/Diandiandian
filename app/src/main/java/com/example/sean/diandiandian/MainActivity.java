@@ -53,8 +53,8 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onDestroy(){
-        super.onDestroy();
+    public void onBackPressed(){
+        super.onBackPressed();
         ActivityCollector.finishAll();
         finish();
     }

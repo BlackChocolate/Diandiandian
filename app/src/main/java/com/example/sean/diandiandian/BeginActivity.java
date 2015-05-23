@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 
+import com.example.sean.diandiandian.collector.ActivityCollector;
 import com.example.sean.diandiandian.collector.BaseActivity;
 
 import java.util.Timer;
@@ -26,5 +27,13 @@ public class BeginActivity extends BaseActivity {
             }
         };
         timer.schedule(task, 1000 * 4);
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        ActivityCollector.finishAll();
+        finish();
+
     }
 }
