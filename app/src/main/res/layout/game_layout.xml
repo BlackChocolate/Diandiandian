@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/main_picture1"
+        android:scaleType="fitXY"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="The rest of time"
+        android:id="@+id/time_text"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />       //时间倒计时
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Score"
+        android:id="@+id/score_text"
+        android:layout_below="@+id/time_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp" />           //得分
+
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:text="Click me!"
+        android:id="@+id/click_button"
+        android:layout_marginBottom="95dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />//点击按钮
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Highest score:0"
+        android:id="@+id/highest_score_text"
+        android:layout_below="@+id/score_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="32dp" />      //最高得分
+
+
+
+</RelativeLayout>
