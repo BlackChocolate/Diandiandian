@@ -2,6 +2,7 @@ package com.example.sean.diandiandian;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -88,7 +89,7 @@ public class GameActivity extends BaseActivity {
                             SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
                             editor.putInt("highestfenshu", fen);
                             editor.commit();
-                            Toast.makeText(GameActivity.this, "success",
+                            Toast.makeText(GameActivity.this, "You create the highest score!",
                                     Toast.LENGTH_SHORT).show();
 
                        }
@@ -112,7 +113,11 @@ public class GameActivity extends BaseActivity {
                         dialog.setPositiveButton("share", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                finish();//分享
+                                Intent intent=new Intent(Intent.ACTION_SEND);
+                                intent.setType("text/plain");
+                                intent.putExtra(Intent.EXTRA_SUBJECT, "share");
+                                intent.putExtra(Intent.EXTRA_TEXT,"hi,Are you OK? The game Diandiandian is so interesting.My score is "+fen+" ,Do you want to fight with me?Click here to download:http://7xiu5t.com1.z0.glb.clouddn.com/Diandiandian.apk");
+                                startActivity(Intent.createChooser(intent, "share to"));//一个分享链接
                             }
                         });
                         dialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
