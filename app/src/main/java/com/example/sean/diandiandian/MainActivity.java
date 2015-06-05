@@ -1,7 +1,10 @@
 package com.example.sean.diandiandian;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -9,13 +12,16 @@ import android.widget.Button;
 import com.example.sean.diandiandian.collector.ActivityCollector;
 import com.example.sean.diandiandian.collector.BaseActivity;
 
+import java.io.File;
+import java.io.IOException;
+
 
 public class MainActivity extends BaseActivity {
     private Button startbutton;
-    private Button thankbutton;
+    private Button picbutton;
     private Button exitbutton;
+    private Uri imageUri;
 
-    public static String[] data={"0","0","0","0","0","0","0","0"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +38,25 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        thankbutton=(Button)findViewById(R.id.thank_button);
-        thankbutton.setOnClickListener(new View.OnClickListener() {
+        picbutton=(Button)findViewById(R.id.picture_button);
+        picbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ThankActivity.class);
+                File outputImage=new File(Environment.getExternalStorageDirectory(),"output_image.jpg");
+                try{
+                    if(outputImage.exists()){
+                        outputImage.delete();
+                    }
+                    outputImage.createNewFile();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                imageUri= Uri.fromFile(outputImage);
+                Intent intent=new Intent("android.intent.action.GET_CONTENT");
+                intent.setType("image/*");
+                intent.putExtra("crop", true);
+                intent.putExtra("scale", true);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
                 startActivity(intent);
             }
         });

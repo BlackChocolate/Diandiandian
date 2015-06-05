@@ -2,18 +2,24 @@ package com.example.sean.diandiandian;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sean.diandiandian.collector.BaseActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,10 +27,12 @@ import java.util.TimerTask;
  * Created by sean on 2015/5/21.
  */
 public class GameActivity extends BaseActivity {
-    private TextView timetext;      // ±º‰µπº∆ ±Œƒ±æ
-    private TextView scoretext;         //∑÷ ˝
-    private TextView highestscoretext;  //◊Ó∏ﬂµ√∑÷
+    private TextView timetext;
+    private TextView scoretext;
+    private TextView highestscoretext;
+    private ImageView imageView;
     private int highestfenshu=0;
+
 
     private Button clickbutton;
     private String titletext;
@@ -50,6 +58,7 @@ public class GameActivity extends BaseActivity {
         scoretext=(TextView)findViewById(R.id.score_text);
         highestscoretext=(TextView)findViewById(R.id.highest_score_text);
 
+
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         highestfenshu = pref.getInt("highestfenshu", 0);
         highestscoretext.setText("Highest score: " + highestfenshu);
@@ -65,7 +74,6 @@ public class GameActivity extends BaseActivity {
             }
         });
 
-            // ˝æ›∂¡»°
 
     }
 
@@ -107,17 +115,16 @@ public class GameActivity extends BaseActivity {
                         dialog.setTitle(titletext);
                         dialog.setMessage("Your score is: " + fen);
                         dialog.setCancelable(false);
-                        //…Ë÷√setCancelable(true) ±£¨µ„ª˜ProgressDialog
-                        // “‘Õ‚µƒ«¯”Úµƒ ±∫ÚProgressDialogæÕª·πÿ±’£¨∑¥÷Æ…Ë÷√setCancelable(false) ±£¨
-                        // µ„ª˜ProgressDialog“‘Õ‚µƒ«¯”Ú≤ªª·πÿ±’ProgressDialog
-                        dialog.setPositiveButton("share", new DialogInterface.OnClickListener() {
+                        dialog.setPositiveButton("screenshot", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent=new Intent(Intent.ACTION_SEND);
+                                GetandSaveCurrentImage();
+                                finish();
+                                /*Intent intent = new Intent(Intent.ACTION_SEND);
                                 intent.setType("text/plain");
                                 intent.putExtra(Intent.EXTRA_SUBJECT, "share");
-                                intent.putExtra(Intent.EXTRA_TEXT,"hi,Are you OK? The game Diandiandian is so interesting.My score is "+fen+" ,Do you want to fight with me?Click here to download:http://7xiu5t.com1.z0.glb.clouddn.com/Diandiandian.apk");
-                                startActivity(Intent.createChooser(intent, "share to"));//“ª∏ˆ∑÷œÌ¡¥Ω”
+                                intent.putExtra(Intent.EXTRA_TEXT, "My score is " + fen + " ,Click here to download:http://7xiu5t.com1.z0.glb.clouddn.com/Diandiandian.apk");
+                                startActivity(Intent.createChooser(intent, "share to"));*/
                             }
                         });
                         dialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
@@ -139,4 +146,54 @@ public class GameActivity extends BaseActivity {
         timer.cancel();
     }
 
+
+
+    protected void GetandSaveCurrentImage() {
+
+        WindowManager widowManager = getWindowManager();
+        Display display = widowManager.getDefaultDisplay();
+        int w = display.getWidth();
+        int h = display.getHeight();
+
+        Bitmap Bmp = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
+        View decorview = this.getWindow().getDecorView();
+        decorview.setDrawingCacheEnabled(true);
+        Bmp = decorview.getDrawingCache();
+        try {
+            String SavePath = getSDCardPath() + "/ScreenImage";
+            File path = new File(SavePath);
+            String filepath = SavePath + "/Screen_1.jpg";
+            File file = new File(filepath);
+            if(!path.exists()){
+                path.mkdirs();
+            }
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            FileOutputStream fos = null;
+            fos = new FileOutputStream(file);
+            if(null != fos){
+                Bmp.compress(Bitmap.CompressFormat.PNG, 90, fos);
+                fos.flush();
+                fos.close();
+                Toast.makeText(this,"Êà™Â±èÊñá‰ª∂Â∑≤‰øùÂ≠òËá≥SDCard/ScreenImage/‰∏ã",Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private String getSDCardPath() {
+        File sdCardDir = null;
+        boolean sdcardExit = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+        if(sdcardExit){
+            sdCardDir = Environment.getExternalStorageDirectory();
+        }
+        return sdCardDir.toString();
+    }
 }
+
+
+
+
+
+
